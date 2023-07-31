@@ -1,5 +1,6 @@
 package com.kk.expensecalculator.report;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -33,7 +34,10 @@ public class PDFGenerator implements ReportGenerator {
 			HttpServletResponse response) throws DocumentException, IOException {
 
 		Document document = new Document(PageSize.A4);
+		// To display the pdf in-line when the Generate PDF end-point is accessed.
 		PdfWriter.getInstance(document, response.getOutputStream());
+		// Save the generated PDF file to disk for sending the attachment in the email.
+		PdfWriter.getInstance(document, new FileOutputStream("C:\\projects\\expense-calculator\\Expense_Data.pdf"));
 		document.open();
 
 		Font fontTitle = fontConfig();

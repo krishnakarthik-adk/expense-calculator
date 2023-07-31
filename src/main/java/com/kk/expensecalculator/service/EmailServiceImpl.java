@@ -41,7 +41,6 @@ public class EmailServiceImpl implements EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
         
         helper.setTo("krishnakarthik.adk@gmail.com");
-
         helper.setSubject("Testing from Spring Boot");
 
         // default = text/plain
@@ -51,15 +50,18 @@ public class EmailServiceImpl implements EmailService {
         helper.setText("<h1>Expesne Report</h1>", true);
 
 		// hard coded a file path
-
-        helper.addAttachment("Expense_Data.pdf", new File("C:\\projects\\expense-calculator\\Expense_Data.pdf"));
+        Path path = FileSystems.getDefault().getPath("C:\\projects\\expense-calculator\\Expense_Data.pdf");
+        
+        if(Files.exists(path)) {
+        	helper.addAttachment("Expense_Data.pdf", new File("C:\\projects\\expense-calculator\\Expense_Data.pdf"));
+        }
 
         mailSender.send(msg);
         
         // Delete the file after sending the email.
-        Path path = FileSystems.getDefault().getPath("C:\\projects\\expense-calculator\\Expense_Data.pdf");
         try {
-			Files.delete(path);
+        	Files.deleteIfExists(path);
+			// Files.delete(path);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
