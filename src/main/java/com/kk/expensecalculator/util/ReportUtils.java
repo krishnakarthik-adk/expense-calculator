@@ -1,5 +1,6 @@
 package com.kk.expensecalculator.util;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.itextpdf.text.BaseColor;
@@ -32,6 +33,10 @@ public class ReportUtils {
 		footerNoteParagraph.setAlignment(Element.ALIGN_MIDDLE);
 		document.add(Chunk.NEWLINE);
 		document.add(footerNoteParagraph);
+	}
+	
+	public static List<String> getColumnHeaders(String columnHeaders){
+		return Arrays.asList(columnHeaders.split(","));
 	}
 	
 }

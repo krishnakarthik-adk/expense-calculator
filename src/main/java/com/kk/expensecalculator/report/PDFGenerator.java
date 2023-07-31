@@ -3,12 +3,13 @@ package com.kk.expensecalculator.report;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.Chunk;
@@ -27,7 +28,25 @@ import com.kk.expensecalculator.util.ReportUtils;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@PropertySource(value = "classpath:config/pdf.properties")
 public class PDFGenerator implements ReportGenerator {
+	
+	@Value("${pdf.filename}")
+	private String fileName;
+	@Value("${pdf.generatedfile.location}")
+	private String fileLocation;
+	@Value("${pdf.doc.header}")
+	private String header;
+	@Value("${pdf.doc.subheader}")
+	private String subHeader;
+	@Value("${pdf.doc.summary}")
+	private String summary;
+	@Value("${pdf.doc.expenseDetails}")
+	private String expenseDetails;
+	@Value("${pdf.expensedetails.colheaders}")
+	private String expenseDetailsColHeaders;
+	@Value("${pdf.summary.colheaders}")
+	private String summaryColHeaders;
 	
 	@Override
 	public void generateExpensePDFReport(List<WaterDairyExpenseDTO> waterDairyExpenseDTOList,
@@ -37,22 +56,22 @@ public class PDFGenerator implements ReportGenerator {
 		// To display the pdf in-line when the Generate PDF end-point is accessed.
 		PdfWriter.getInstance(document, response.getOutputStream());
 		// Save the generated PDF file to disk for sending the attachment in the email.
-		PdfWriter.getInstance(document, new FileOutputStream("C:\\projects\\expense-calculator\\Expense_Data.pdf"));
+		PdfWriter.getInstance(document, new FileOutputStream(fileLocation + "\\" + fileName));
 		document.open();
 
 		Font fontTitle = fontConfig();
 			
 		// Create Object of Paragraph
-		document.add(new Paragraph("Water and Dairy Expense Report", fontTitle));
-		document.add(new Paragraph("Report generated on " + LocalDateTime.now()));
+		document.add(new Paragraph(header, fontTitle));
+		document.add(new Paragraph(subHeader + ": " + LocalDateTime.now()));
 		
 		document.add(new Paragraph("\n"));
 		
 		// Summary
-		document.add(new Paragraph("Summary: ", fontTitle));
+		document.add(new Paragraph(summary + ":", fontTitle));
 		document.add(new Paragraph("\n"));
 		PdfPTable summaryTable = summaryTableConfig();
-		ReportUtils.addTableHeaders(Arrays.asList("ITEM", "TOTAL PAYABLE"), summaryTable);
+		ReportUtils.addTableHeaders(ReportUtils.getColumnHeaders(summaryColHeaders), summaryTable);
 		
 		// Group by to eliminate the individual filtering of items. To populate the summary table
 		Map<String, Integer> summaryMap = new HashMap<>();
@@ -68,11 +87,11 @@ public class PDFGenerator implements ReportGenerator {
 		document.add(Chunk.NEWLINE);
 		
 		// Details
-		document.add(new Paragraph("Expense Details: ", fontTitle));
+		document.add(new Paragraph(expenseDetails + ":", fontTitle));
 		document.add(new Paragraph("\n"));
 		PdfPTable pdfPTable = setDetailsTableConfig();
-
-		ReportUtils.addTableHeaders(Arrays.asList("ITEM", "QTY", "UNIT PRICE", "TOTAL PRICE", "DATE", "COMMENTS"), pdfPTable);
+		
+		ReportUtils.addTableHeaders(ReportUtils.getColumnHeaders(expenseDetailsColHeaders), pdfPTable);
 		addExpesneDetailRows(waterDairyExpenseDTOList, pdfPTable);
 		document.add(pdfPTable);
 		

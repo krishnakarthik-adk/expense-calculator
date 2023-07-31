@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,7 +19,10 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Component
-@PropertySource(value = "classpath:config/mail.properties")
+@PropertySources(value = {
+		@PropertySource(value = "classpath:config/mail.properties"),
+		@PropertySource(value = "classpath:config/pdf.properties"),
+})
 public class EmailServiceImpl implements EmailService {
 
 	@Autowired
