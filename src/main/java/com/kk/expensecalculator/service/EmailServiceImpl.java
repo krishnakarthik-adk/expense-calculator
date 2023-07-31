@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,10 +18,26 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Component
+@PropertySource(value = "classpath:config/mail.properties")
 public class EmailServiceImpl implements EmailService {
 
 	@Autowired
 	JavaMailSender mailSender;
+	
+	@Value("${mail.to}") 
+	private String to;
+	
+	@Value("${mail.subject}")
+	private String subject;
+	
+	@Value("${mail.body}")
+	private String body;
+	
+	@Value("${pdf.filename}")
+	private String fileName;
+	
+	@Value("${pdf.generatedfile.location}")
+	private String fileLocation;
 	
 	@Override
 	public void sendEmail(String to, String subject, String body) {
@@ -40,20 +58,19 @@ public class EmailServiceImpl implements EmailService {
 		// true = multipart message
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
         
-        helper.setTo("krishnakarthik.adk@gmail.com");
-        helper.setSubject("Testing from Spring Boot");
+        helper.setTo(to);
+        helper.setSubject(subject);
 
         // default = text/plain
         //helper.setText("Check attachment for image!");
 
         // true = text/html
-        helper.setText("<h1>Expesne Report</h1>", true);
+        helper.setText(body, true);
 
-		// hard coded a file path
-        Path path = FileSystems.getDefault().getPath("C:\\projects\\expense-calculator\\Expense_Data.pdf");
+        Path path = FileSystems.getDefault().getPath(fileLocation + "\\" + fileName);
         
         if(Files.exists(path)) {
-        	helper.addAttachment("Expense_Data.pdf", new File("C:\\projects\\expense-calculator\\Expense_Data.pdf"));
+        	helper.addAttachment(fileName, new File(fileLocation + "\\" + fileName));
         }
 
         mailSender.send(msg);
@@ -61,9 +78,7 @@ public class EmailServiceImpl implements EmailService {
         // Delete the file after sending the email.
         try {
         	Files.deleteIfExists(path);
-			// Files.delete(path);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
