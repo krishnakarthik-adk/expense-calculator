@@ -50,7 +50,7 @@ public class PDFGenerator implements ReportGenerator {
 	
 	@Override
 	public void generateExpensePDFReport(List<WaterDairyExpenseDTO> waterDairyExpenseDTOList,
-			HttpServletResponse response) throws DocumentException, IOException {
+			String strStartDate, String strEndDate, HttpServletResponse response) throws DocumentException, IOException {
 
 		Document document = new Document(PageSize.A4);
 		// To display the pdf in-line when the Generate PDF end-point is accessed.
@@ -67,8 +67,9 @@ public class PDFGenerator implements ReportGenerator {
 		
 		document.add(new Paragraph("\n"));
 		
-		// Summary
-		document.add(new Paragraph(summary + ":", fontTitle));
+		// Summary for the date range
+		document.add(new Paragraph(summary, fontTitle));
+		document.add(new Paragraph("Expense for the period: " + strStartDate + " to " + strEndDate));
 		document.add(new Paragraph("\n"));
 		PdfPTable summaryTable = summaryTableConfig();
 		ReportUtils.addTableHeaders(ReportUtils.getColumnHeaders(summaryColHeaders), summaryTable);

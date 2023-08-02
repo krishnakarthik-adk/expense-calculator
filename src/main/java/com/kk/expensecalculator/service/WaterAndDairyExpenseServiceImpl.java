@@ -1,5 +1,6 @@
 package com.kk.expensecalculator.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,9 @@ public class WaterAndDairyExpenseServiceImpl implements WaterAndDairyExpenseServ
 	}
 
 	@Override
-	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseData() {
-		
-		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findAll());
+	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseDataForDateRange(LocalDate startDate, LocalDate endDate) {
+ 
+		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate));
 	}
-	
-	// TO DO: Get expense by date range
 	
 }

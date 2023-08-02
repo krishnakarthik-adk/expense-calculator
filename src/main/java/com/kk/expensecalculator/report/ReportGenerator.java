@@ -9,6 +9,7 @@ import com.kk.expensecalculator.dto.WaterDairyExpenseDTO;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface ReportGenerator {
-	public void generateExpensePDFReport(List<WaterDairyExpenseDTO> waterDairyExpenseDTOList,
-			HttpServletResponse response) throws DocumentException, IOException;
+
+	void generateExpensePDFReport(List<WaterDairyExpenseDTO> waterDairyExpenseDTOList, String strStartDate,
+			String strEndDate, HttpServletResponse response) throws DocumentException, IOException;
 }
