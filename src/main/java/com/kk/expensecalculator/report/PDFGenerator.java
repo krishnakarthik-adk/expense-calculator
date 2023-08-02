@@ -23,6 +23,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.kk.expensecalculator.dto.WaterDairyExpenseDTO;
+import com.kk.expensecalculator.util.ExpenseCalDateUtils;
 import com.kk.expensecalculator.util.ReportUtils;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -69,7 +70,7 @@ public class PDFGenerator implements ReportGenerator {
 		
 		// Summary for the date range
 		document.add(new Paragraph(summary, fontTitle));
-		document.add(new Paragraph("Expense for the period: " + strStartDate + " to " + strEndDate));
+		document.add(new Paragraph("Expense for the period: " + ExpenseCalDateUtils.formatDate(strStartDate) + " to " + ExpenseCalDateUtils.formatDate(strEndDate)));
 		document.add(new Paragraph("\n"));
 		PdfPTable summaryTable = summaryTableConfig();
 		ReportUtils.addTableHeaders(ReportUtils.getColumnHeaders(summaryColHeaders), summaryTable);
