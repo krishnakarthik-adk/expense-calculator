@@ -48,6 +48,10 @@ public class PDFGenerator implements ReportGenerator {
 	private String expenseDetailsColHeaders;
 	@Value("${pdf.summary.colheaders}")
 	private String summaryColHeaders;
+	@Value("${pdf.expense.period}")
+	private String expensePeriod;
+	@Value("${pdf.total.amount}")
+	private String totalAmount;
 	
 	@Override
 	public void generateExpensePDFReport(List<WaterDairyExpenseDTO> waterDairyExpenseDTOList,
@@ -68,27 +72,35 @@ public class PDFGenerator implements ReportGenerator {
 		
 		document.add(new Paragraph("\n"));
 		
-		// Summary for the date range
-		document.add(new Paragraph(summary, fontTitle));
-		document.add(new Paragraph("Expense for the period: " + ExpenseCalDateUtils.formatDate(strStartDate) + " to " + ExpenseCalDateUtils.formatDate(strEndDate)));
-		document.add(new Paragraph("\n"));
-		PdfPTable summaryTable = summaryTableConfig();
-		ReportUtils.addTableHeaders(ReportUtils.getColumnHeaders(summaryColHeaders), summaryTable);
-		
+		// Summary table
 		// Group by to eliminate the individual filtering of items. To populate the summary table
 		Map<String, Integer> summaryMap = new HashMap<>();
-		Map<String, List<WaterDairyExpenseDTO>> expenseSummaryMap = waterDairyExpenseDTOList.stream().collect(Collectors.groupingBy(WaterDairyExpenseDTO::getItem));
+		Map<String, List<WaterDairyExpenseDTO>> expenseSummaryMap = waterDairyExpenseDTOList.stream()
+				.collect(Collectors.groupingBy(WaterDairyExpenseDTO::getItem));
 		expenseSummaryMap.forEach((item, expenseList) -> {
-			Integer itemExpesneSummary = calculateTotalPayable(expenseList.stream().map(WaterDairyExpenseDTO::getTotalPrice).toList());
+			Integer itemExpesneSummary = calculateTotalPayable(
+					expenseList.stream().map(WaterDairyExpenseDTO::getTotalPrice).toList());
 			summaryMap.put(item, itemExpesneSummary);
 		});
 		
+		int finalPayable = summaryMap.values().stream().reduce(0, (i, j) -> i + j);
+		
+		document.add(new Paragraph(summary, fontTitle));
+		document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDate(strStartDate) + " to " + ExpenseCalDateUtils.formatDate(strEndDate)));
+		document.add(new Paragraph(totalAmount + " " + finalPayable));
+		document.add(new Paragraph("\n"));
+		
+		PdfPTable summaryTable = summaryTableConfig();
+		// Summary headers
+		ReportUtils.addTableHeaders(ReportUtils.getColumnHeaders(summaryColHeaders), summaryTable);
+		
+		// Summary rows
 		addSummaryRows(summaryMap, summaryTable);
-
 		document.add(summaryTable);
+
 		document.add(Chunk.NEWLINE);
 		
-		// Details
+		// Expense Details
 		document.add(new Paragraph(expenseDetails + ":", fontTitle));
 		document.add(new Paragraph("\n"));
 		PdfPTable pdfPTable = setDetailsTableConfig();
@@ -146,7 +158,7 @@ public class PDFGenerator implements ReportGenerator {
 			pdfPTable.addCell(String.valueOf(data.getQuantity()));
 			pdfPTable.addCell(String.valueOf(data.getUnitPrice()));
 			pdfPTable.addCell(String.valueOf(data.getTotalPrice()));
-			pdfPTable.addCell(data.getDateOfExpense().toString());
+			pdfPTable.addCell(ExpenseCalDateUtils.formatDate(data.getDateOfExpense().toString()));
 			pdfPTable.addCell(data.getComments());
 		});
 	}
