@@ -30,5 +30,11 @@ public class WaterAndDairyExpenseServiceImpl implements WaterAndDairyExpenseServ
  
 		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate));
 	}
+
+	@Override
+	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseData() {
+		
+		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findAll());
+	}
 	
 }

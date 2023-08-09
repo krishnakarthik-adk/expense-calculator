@@ -10,4 +10,6 @@ public interface WaterAndDairyExpenseService {
 
 	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseDataForDateRange(LocalDate startDate, LocalDate endDate);
 
+	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseData();
+
 }

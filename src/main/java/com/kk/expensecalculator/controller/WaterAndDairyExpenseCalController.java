@@ -32,7 +32,7 @@ public class WaterAndDairyExpenseCalController {
 	public List<WaterDairyExpenseDTO> getWaterAndDairyExpense(@RequestParam String strStartDate, @RequestParam String strEndDate){
 		
 		LocalDate startDate = null;
-		LocalDate endDate = null;
+		LocalDate endDate = null;	
 		
 		if(StringUtils.isNotBlank(strStartDate)) {
 			startDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate);
@@ -40,12 +40,17 @@ public class WaterAndDairyExpenseCalController {
 			startDate = LocalDate.now();
 		}
 		if(StringUtils.isNotBlank(strEndDate)) {
-			endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate);
+			endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strEndDate);
 		} else {
 			endDate = LocalDate.now();
-		}
-		
+		}		
 		return waterAndDairyExpenseService.getWaterAndDairyExpenseDataForDateRange(startDate, endDate);
+	}
+	
+	// Demo for UI project
+	@RequestMapping(value = "/getWaterAndExpenseData", method = RequestMethod.GET, produces = "application/json")
+	public List<WaterDairyExpenseDTO> getWaterAndDairyExpense1(){
+		return waterAndDairyExpenseService.getWaterAndDairyExpenseData();
 	}
 	
 }
