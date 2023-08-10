@@ -86,7 +86,7 @@ public class PDFGenerator implements ReportGenerator {
 		int finalPayable = summaryMap.values().stream().reduce(0, (i, j) -> i + j);
 		
 		document.add(new Paragraph(summary, fontTitle));
-		document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDate(strStartDate) + " to " + ExpenseCalDateUtils.formatDate(strEndDate)));
+		// document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDate(strStartDate) + " to " + ExpenseCalDateUtils.formatDate(strEndDate)));
 		document.add(new Paragraph(totalAmount + " " + finalPayable));
 		document.add(new Paragraph("\n"));
 		

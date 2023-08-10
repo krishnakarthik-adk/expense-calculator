@@ -12,7 +12,7 @@ import com.kk.expensecalculator.domain.WaterDairyExpenseDO;
 @Repository
 public interface WaterAndDairyExpenseRepo extends JpaRepository<WaterDairyExpenseDO, Long> {
 
-	@Query(value = "SELECT * FROM WATER_DAIRY_EXPENSE w WHERE w.DATE_OF_EXPENSE BETWEEN :startDate AND :endDate", nativeQuery = true)
+	@Query(value = "SELECT * FROM WATER_DAIRY_EXPENSE_COPY w WHERE w.DATE_OF_EXPENSE BETWEEN :startDate AND :endDate", nativeQuery = true)
 	List<WaterDairyExpenseDO> findByDateRange(LocalDate startDate, LocalDate endDate);
 
 }

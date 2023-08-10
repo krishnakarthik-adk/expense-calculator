@@ -44,8 +44,8 @@ public class ExpenseCalculatorReportController {
 		response.setContentType("application/pdf");
 		response.setHeader(HTTP_HEADERS.HEADER_KEY.toString(), HTTP_HEADERS.HEADER_VALUE.toString());
 		
-		LocalDate startDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate);
-		LocalDate endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strEndDate);
+		LocalDate startDate = ExpenseCalDateUtils.convertInputStringDateToLocalDate(strStartDate);
+		LocalDate endDate = ExpenseCalDateUtils.convertInputStringDateToLocalDate(strEndDate);
 
 		List<WaterDairyExpenseDTO> waterDairyExpenseDTOList = waterAndDairyExpenseService.getWaterAndDairyExpenseDataForDateRange(startDate, endDate);
 

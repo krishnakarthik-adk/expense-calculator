@@ -1,21 +1,19 @@
 package com.kk.expensecalculator.dto;
 
-import java.time.LocalDate;
-
 public class WaterDairyExpenseDTO {
 	private String item;
 	private int quantity;
 	private int unitPrice;
 	private int totalPrice;
 	private String comments;
-	private LocalDate dateOfExpense;
+	private String dateOfExpense;
 	
 	public WaterDairyExpenseDTO() {
 		
 	}
 	
 	public WaterDairyExpenseDTO(String item, int quantity, int unitPrice, int totalPrice, String comments,
-			LocalDate dateOfExpense) {
+			String dateOfExpense) {
 		super();
 		this.item = item;
 		this.quantity = quantity;
@@ -65,11 +63,11 @@ public class WaterDairyExpenseDTO {
 		this.comments = comments;
 	}
 
-	public LocalDate getDateOfExpense() {
+	public String getDateOfExpense() {
 		return dateOfExpense;
 	}
 
-	public void setDateOfExpense(LocalDate dateOfExpense) {
+	public void setDateOfExpense(String dateOfExpense) {
 		this.dateOfExpense = dateOfExpense;
 	}
 }

@@ -1,6 +1,8 @@
 package com.kk.expensecalculator.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,19 +33,17 @@ public class WaterAndDairyExpenseCalController {
 	@RequestMapping(value = "/getWaterAndExpenseDataFor", method = RequestMethod.GET, produces = "application/json")
 	public List<WaterDairyExpenseDTO> getWaterAndDairyExpense(@RequestParam String strStartDate, @RequestParam String strEndDate){
 		
-		LocalDate startDate = null;
-		LocalDate endDate = null;	
+		// We initialize the startDate & endDate to LocalDate.now() if we don't receive the date range
+		LocalDate startDate = LocalDate.now();
+		LocalDate endDate = LocalDate.now();
+		List<LocalDate> dateRange = new ArrayList<>();
 		
-		if(StringUtils.isNotBlank(strStartDate)) {
-			startDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate);
-		} else {
-			startDate = LocalDate.now();
+		if(StringUtils.isNotBlank(strStartDate) && StringUtils.isNotBlank(strEndDate)) {
+			dateRange = ExpenseCalDateUtils.convertStringDateRangeToLocalDateRange(Arrays.asList(strStartDate, strEndDate));
+			startDate = dateRange.get(0);
+			endDate = dateRange.get(1);
 		}
-		if(StringUtils.isNotBlank(strEndDate)) {
-			endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strEndDate);
-		} else {
-			endDate = LocalDate.now();
-		}		
+		
 		return waterAndDairyExpenseService.getWaterAndDairyExpenseDataForDateRange(startDate, endDate);
 	}
 	
