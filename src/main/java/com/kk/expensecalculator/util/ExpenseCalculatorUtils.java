@@ -38,7 +38,7 @@ public class ExpenseCalculatorUtils {
 			waterDairyExpenseDO.setQuantity(data.getQuantity());
 			waterDairyExpenseDO.setUnitPrice(data.getUnitPrice());
 			waterDairyExpenseDO.setTotalPrice(data.getUnitPrice() * data.getQuantity());
-			waterDairyExpenseDO.setDateOfExpense(ExpenseCalDateUtils.convertInputStringDateToLocalDate(data.getDateOfExpense()));
+			waterDairyExpenseDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(data.getDateOfExpense(), ExpenseCalDateUtils.INPUT_DATE_PATTERN));
 			
 			expenseList.add(waterDairyExpenseDO);
 		});

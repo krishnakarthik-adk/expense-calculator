@@ -39,7 +39,7 @@ public class WaterAndDairyExpenseCalController {
 		List<LocalDate> dateRange = new ArrayList<>();
 		
 		if(StringUtils.isNotBlank(strStartDate) && StringUtils.isNotBlank(strEndDate)) {
-			dateRange = ExpenseCalDateUtils.convertStringDateRangeToLocalDateRange(Arrays.asList(strStartDate, strEndDate));
+			dateRange = ExpenseCalDateUtils.convertStringDateRangeToLocalDateRange(Arrays.asList(strStartDate, strEndDate), ExpenseCalDateUtils.INPUT_DATE_PATTERN);
 			startDate = dateRange.get(0);
 			endDate = dateRange.get(1);
 		}

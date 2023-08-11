@@ -2,6 +2,7 @@ package com.kk.expensecalculator.report;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +87,9 @@ public class PDFGenerator implements ReportGenerator {
 		int finalPayable = summaryMap.values().stream().reduce(0, (i, j) -> i + j);
 		
 		document.add(new Paragraph(summary, fontTitle));
-		// document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDate(strStartDate) + " to " + ExpenseCalDateUtils.formatDate(strEndDate)));
+		LocalDate startDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+		LocalDate endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+		document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDateForOutput(startDate) + " to " + ExpenseCalDateUtils.formatDateForOutput(endDate)));
 		document.add(new Paragraph(totalAmount + " " + finalPayable));
 		document.add(new Paragraph("\n"));
 		
@@ -157,8 +160,8 @@ public class PDFGenerator implements ReportGenerator {
 			pdfPTable.addCell(data.getItem());
 			pdfPTable.addCell(String.valueOf(data.getQuantity()));
 			pdfPTable.addCell(String.valueOf(data.getUnitPrice()));
-			pdfPTable.addCell(String.valueOf(data.getTotalPrice()));
-			pdfPTable.addCell(ExpenseCalDateUtils.formatDate(data.getDateOfExpense().toString()));
+			pdfPTable.addCell(String.valueOf(data.getTotalPrice()));			
+			pdfPTable.addCell(ExpenseCalDateUtils.formatDateForOutput(LocalDate.parse(data.getDateOfExpense()))); // To Format
 			pdfPTable.addCell(data.getComments());
 		});
 	}
@@ -166,5 +169,5 @@ public class PDFGenerator implements ReportGenerator {
 	private Integer calculateTotalPayable(List<Integer> expenseList) {
 		return expenseList.stream().reduce(0, (i, j) -> i+j);
 	}
-
+	
 }
