@@ -25,6 +25,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.kk.expensecalculator.dto.WaterDairyExpenseDTO;
 import com.kk.expensecalculator.util.ExpenseCalDateUtils;
+import com.kk.expensecalculator.util.ExpenseCalculatorUtils;
 import com.kk.expensecalculator.util.ReportUtils;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -79,7 +80,7 @@ public class PDFGenerator implements ReportGenerator {
 		Map<String, List<WaterDairyExpenseDTO>> expenseSummaryMap = waterDairyExpenseDTOList.stream()
 				.collect(Collectors.groupingBy(WaterDairyExpenseDTO::getItem));
 		expenseSummaryMap.forEach((item, expenseList) -> {
-			Integer itemExpesneSummary = calculateTotalPayable(
+			Integer itemExpesneSummary = ExpenseCalculatorUtils.calculateTotalPayable(
 					expenseList.stream().map(WaterDairyExpenseDTO::getTotalPrice).toList());
 			summaryMap.put(item, itemExpesneSummary);
 		});
@@ -88,7 +89,7 @@ public class PDFGenerator implements ReportGenerator {
 		
 		document.add(new Paragraph(summary, fontTitle));
 		LocalDate startDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
-		LocalDate endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+		LocalDate endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strEndDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
 		document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDateForOutput(startDate) + " to " + ExpenseCalDateUtils.formatDateForOutput(endDate)));
 		document.add(new Paragraph(totalAmount + " " + finalPayable));
 		document.add(new Paragraph("\n"));
@@ -164,10 +165,6 @@ public class PDFGenerator implements ReportGenerator {
 			pdfPTable.addCell(ExpenseCalDateUtils.formatDateForOutput(LocalDate.parse(data.getDateOfExpense()))); // To Format
 			pdfPTable.addCell(data.getComments());
 		});
-	}
-	
-	private Integer calculateTotalPayable(List<Integer> expenseList) {
-		return expenseList.stream().reduce(0, (i, j) -> i+j);
 	}
 	
 }

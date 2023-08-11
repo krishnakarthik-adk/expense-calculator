@@ -45,4 +45,8 @@ public class ExpenseCalculatorUtils {
 		
 		return expenseList;
 	}
+	
+	public static Integer calculateTotalPayable(List<Integer> expenseList) {
+		return expenseList.stream().reduce(0, (i, j) -> i+j);
+	}
 }
