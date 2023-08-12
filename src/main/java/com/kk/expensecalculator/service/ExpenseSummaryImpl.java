@@ -27,11 +27,11 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 		List<WaterDairyExpenseDTO> expenseDataList = ExpenseCalculatorUtils.toDTOObjectFromDO(expenseSummaryRepo.findAll());
 		
 		// Summary
-		Map<String, List<WaterDairyExpenseDTO>> groupedExpenseData = expenseDataList.stream().collect(Collectors.groupingBy(WaterDairyExpenseDTO::getItem));
+		Map<String, List<WaterDairyExpenseDTO>> expenseSummaryPerItem = expenseDataList.stream().collect(Collectors.groupingBy(WaterDairyExpenseDTO::getItem));
 		
 		List<ItemSummaryDTO> summaryDTOList = new ArrayList<>();
 		
-		groupedExpenseData.forEach((item, expenseDataPerItem) -> {
+		expenseSummaryPerItem.forEach((item, expenseDataPerItem) -> {
 			ItemSummaryDTO summaryDto = new ItemSummaryDTO();
 			summaryDto.setItem(item);			
 			summaryDto.setAmountPayabalePerItem( expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getTotalPrice).reduce((i,j) -> i+j).get() );
