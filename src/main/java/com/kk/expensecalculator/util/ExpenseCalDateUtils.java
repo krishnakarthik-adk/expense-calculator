@@ -1,8 +1,10 @@
 package com.kk.expensecalculator.util;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExpenseCalDateUtils {
@@ -28,5 +30,10 @@ public class ExpenseCalDateUtils {
 		});
 		
 		return dateRange;
+	}
+	
+	public static List<LocalDate> getDateRangeForTheMonth(int month, int year){
+		YearMonth yearMonth = YearMonth.of(year, month);
+		return Arrays.asList(yearMonth.atDay(1), yearMonth.atDay(yearMonth.lengthOfMonth()));
 	}
 }

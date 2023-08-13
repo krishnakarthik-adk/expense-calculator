@@ -17,8 +17,8 @@ public class ExpenseSummaryController {
 	private ExpenseSummary expenseSummary;
 	
 	@RequestMapping(value = "/expenseSummary", method = RequestMethod.GET)
-	public ExpenseSummaryDTO getExpenseSummaryForTheMonth(@RequestParam String summaryMonth){
+	public ExpenseSummaryDTO getExpenseSummaryForTheMonth(@RequestParam String month, @RequestParam String year){
 		
-		return expenseSummary.getExpenseSummaryForTheMonth(summaryMonth);
+		return expenseSummary.getExpenseSummaryForTheMonth(Integer.parseInt(month), Integer.parseInt(year));
 	}
 }
