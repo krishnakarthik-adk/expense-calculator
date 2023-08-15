@@ -1,7 +1,6 @@
 package com.kk.expensecalculator.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +18,14 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 	private ExpenseRecordRepo expenseRecordRepo;
 	
 	@Override
-	public void saveExpenseRecords(List<ExpenseRecordDTO> expenseRecords) {
+	public void saveExpenseRecords(List<ExpenseRecordDTO> expenseRecords, String dateOfExpense) {
 		
-		List<ExpenseRecordDO> expenseRecordDOList = convertDTOToDomainObject(expenseRecords);
+		List<ExpenseRecordDO> expenseRecordDOList = convertDTOToDomainObject(expenseRecords, dateOfExpense);
 		expenseRecordRepo.saveAll(expenseRecordDOList);
 
 	}
 	
-	private List<ExpenseRecordDO> convertDTOToDomainObject(List<ExpenseRecordDTO> expenseRecordDTOList) {
+	private List<ExpenseRecordDO> convertDTOToDomainObject(List<ExpenseRecordDTO> expenseRecordDTOList, String dateOfExpense) {
 		
 		List<ExpenseRecordDO> expenseRecords = new ArrayList<>();
 		
@@ -36,8 +35,9 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 			expenseRecordDO.setItem(expenseRecord.getItem());
 			expenseRecordDO.setAmount(Integer.parseInt(expenseRecord.getAmount()));
 			expenseRecordDO.setExpenseCategory(expenseRecord.getExpenseCategory());
-			expenseRecordDO.setNotes(expenseRecord.getNotes());	
-			expenseRecordDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(expenseRecord.getDateOfExpense(), ExpenseCalDateUtils.INPUT_DATE_PATTERN));
+			expenseRecordDO.setNotes(expenseRecord.getNotes());
+			// We set the date from the parameter received
+			expenseRecordDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(dateOfExpense, ExpenseCalDateUtils.INPUT_DATE_PATTERN));
 			
 			expenseRecords.add(expenseRecordDO);
 		});

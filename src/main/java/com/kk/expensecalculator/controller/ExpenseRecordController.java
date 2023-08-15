@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kk.expensecalculator.dto.ExpenseRecordDTO;
@@ -19,10 +20,10 @@ public class ExpenseRecordController {
 	@Autowired
 	private ExpenseRecordService expenseRecordService;
 	
-	@RequestMapping(value = "/saveExpenseRecords", method = RequestMethod.GET)
-	public ResponseEntity<String> saveExpenseRecords(@RequestBody List<ExpenseRecordDTO> expenseRecords) {
-		expenseRecordService.saveExpenseRecords(expenseRecords);
+	@RequestMapping(value = "/saveExpenseRecords", method = RequestMethod.POST)
+	public ResponseEntity<String> saveExpenseRecords(@RequestBody List<ExpenseRecordDTO> expenseRecords, @RequestParam String dateOfExpense) {
+		expenseRecordService.saveExpenseRecords(expenseRecords, dateOfExpense);
 		
-		return ResponseEntity.ok(""); // To check the diff between normal return and Response Entity
+		return ResponseEntity.ok("Data saved successfully."); // To check the diff between normal return and Response Entity
 	}
 }
