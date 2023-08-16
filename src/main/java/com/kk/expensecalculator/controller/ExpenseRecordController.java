@@ -3,6 +3,7 @@ package com.kk.expensecalculator.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +22,9 @@ public class ExpenseRecordController {
 	private ExpenseRecordService expenseRecordService;
 	
 	@RequestMapping(value = "/saveExpenseRecords", method = RequestMethod.POST)
-	public ResponseEntity<String> saveExpenseRecords(@RequestBody List<ExpenseRecordDTO> expenseRecords, @RequestParam String dateOfExpense) {
+	public ResponseEntity<HttpStatus> saveExpenseRecords(@RequestBody List<ExpenseRecordDTO> expenseRecords, @RequestParam String dateOfExpense) {
 		expenseRecordService.saveExpenseRecords(expenseRecords, dateOfExpense);
 		
-		return ResponseEntity.ok("Data saved successfully."); // To check the diff between normal return and Response Entity
+		return ResponseEntity.ok(HttpStatus.OK); // To check the diff between normal return and Response Entity
 	}
 }
