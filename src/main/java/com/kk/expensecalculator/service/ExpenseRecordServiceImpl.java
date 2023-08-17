@@ -1,6 +1,7 @@
 package com.kk.expensecalculator.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.kk.expensecalculator.domain.ExpenseRecordDO;
 import com.kk.expensecalculator.dto.ExpenseRecordDTO;
 import com.kk.expensecalculator.repository.ExpenseRecordRepo;
+import com.kk.expensecalculator.repository.ExpenseRecordSelectRepo;
 import com.kk.expensecalculator.util.ExpenseCalDateUtils;
 
 @Component
@@ -16,6 +18,9 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 
 	@Autowired
 	private ExpenseRecordRepo expenseRecordRepo;
+	
+	@Autowired
+	private ExpenseRecordSelectRepo expenseRecordSelectRepo;
 	
 	@Override
 	public void saveExpenseRecords(List<ExpenseRecordDTO> expenseRecords, String dateOfExpense) {
@@ -43,6 +48,12 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 		});
 		
 		return expenseRecords;
+	}
+
+	@Override
+	public List<String> getExpenseRecordSelectOptions() {
+		String selectOptions = expenseRecordSelectRepo.findBySelectName();
+		return Arrays.asList(selectOptions.split(","));
 	}
 
 }

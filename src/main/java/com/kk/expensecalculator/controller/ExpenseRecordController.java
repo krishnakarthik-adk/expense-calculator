@@ -27,4 +27,9 @@ public class ExpenseRecordController {
 		
 		return ResponseEntity.ok(HttpStatus.OK); // To check the diff between normal return and Response Entity
 	}
+	
+	@RequestMapping(value = "/getExpenseRecordSelectOptions", method = RequestMethod.GET)
+	public List<String> getExpenseRecordSelectOptions(){
+		return expenseRecordService.getExpenseRecordSelectOptions();
+	}
 }

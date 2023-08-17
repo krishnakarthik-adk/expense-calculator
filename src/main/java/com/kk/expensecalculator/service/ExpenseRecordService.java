@@ -6,4 +6,6 @@ import com.kk.expensecalculator.dto.ExpenseRecordDTO;
 
 public interface ExpenseRecordService {
 	public void saveExpenseRecords(List<ExpenseRecordDTO> expenseRecords, String dateOfExpense);
+
+	public List<String> getExpenseRecordSelectOptions();
 }
