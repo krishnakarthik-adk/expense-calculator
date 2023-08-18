@@ -19,8 +19,9 @@ public class ExpenseSummaryController {
 	@Autowired
 	private ExpenseSummary expenseSummary;
 	
+	// The below is for Water and Dairy expense
 	@RequestMapping(value = "/expenseSummary", method = RequestMethod.GET)
-	public ExpenseSummaryDTO getExpenseSummaryForTheMonth(@RequestParam String month, @RequestParam String year){
+	public ExpenseSummaryDTO getWaterAndDairyMonthlyExpense(@RequestParam String month, @RequestParam String year){
 		
 		// We initialize to the current month and year, in case we don't receive the parameters
 		int monthSelected = LocalDate.now().getMonthValue();
@@ -31,7 +32,28 @@ public class ExpenseSummaryController {
 			yearSelected = Integer.parseInt(year);
 		}
 		
-		return expenseSummary.getExpenseSummaryForTheMonth(monthSelected, yearSelected);
+		return expenseSummary.getWaterAndDairyMonthlyExpense(monthSelected, yearSelected);
+	}
+	
+	/*
+	 * Overall Expense through the input screen
+	 * The reason for separating the water, dairy from monthly expense is that we could easily disable the water and dairy
+	 * expense without much or  little impact.
+	 */
+	@RequestMapping(value = "/monthlyExpenseSummary", method = RequestMethod.GET)
+	public ExpenseSummaryDTO getMonthlyExpense(@RequestParam String month, @RequestParam String year) {
+		
+		// We initialize to the current month and year, in case we don't receive the parameters
+		int monthSelected = LocalDate.now().getMonthValue();
+		int yearSelected = LocalDate.now().getYear();
+		
+		if(validateMonthAndYear(month, year)) {
+			monthSelected = Integer.parseInt(month);
+			yearSelected = Integer.parseInt(year);
+		}		
+		
+		return expenseSummary.getMonthlyExpense(monthSelected, yearSelected);
+		
 	}
 	
 	private boolean validateMonthAndYear(String month, String year) {

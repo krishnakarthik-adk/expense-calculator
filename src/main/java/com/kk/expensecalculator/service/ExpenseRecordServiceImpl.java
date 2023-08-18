@@ -2,6 +2,7 @@ package com.kk.expensecalculator.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 			ExpenseRecordDO expenseRecordDO = new ExpenseRecordDO();
 			
 			expenseRecordDO.setItem(expenseRecord.getItem());
-			expenseRecordDO.setAmount(Integer.parseInt(expenseRecord.getAmount()));
+			expenseRecordDO.setAmount(expenseRecord.getAmount());
 			expenseRecordDO.setExpenseCategory(expenseRecord.getExpenseCategory());
 			expenseRecordDO.setNotes(expenseRecord.getNotes());
 			// We set the date from the parameter received
@@ -53,7 +54,10 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 	@Override
 	public List<String> getExpenseRecordSelectOptions() {
 		String selectOptions = expenseRecordSelectRepo.findBySelectName();
-		return Arrays.asList(selectOptions.split(","));
+		List<String> sortedSelectOpntions = Arrays.asList(selectOptions.split(","));
+		Collections.sort(sortedSelectOpntions);
+		
+		return sortedSelectOpntions;
 	}
 
 }

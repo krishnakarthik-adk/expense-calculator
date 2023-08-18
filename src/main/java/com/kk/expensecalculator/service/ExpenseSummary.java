@@ -4,5 +4,9 @@ import com.kk.expensecalculator.dto.ExpenseSummaryDTO;
 
 public interface ExpenseSummary {
 	
-	public ExpenseSummaryDTO getExpenseSummaryForTheMonth(int month, int year);
+	public ExpenseSummaryDTO getWaterAndDairyMonthlyExpense(int month, int year);
+
+	public ExpenseSummaryDTO getMonthlyExpense(int month, int year);
+
+	
 }

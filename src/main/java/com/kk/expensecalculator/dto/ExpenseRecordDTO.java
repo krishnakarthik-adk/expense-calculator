@@ -2,7 +2,7 @@ package com.kk.expensecalculator.dto;
 
 public class ExpenseRecordDTO {
 	private String item;
-	private String amount;
+	private int amount;
 	private String expenseCategory;
 	private String notes;
 	private String dateOfExpense;
@@ -15,11 +15,11 @@ public class ExpenseRecordDTO {
 		this.item = item;
 	}
 
-	public String getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 

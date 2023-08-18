@@ -10,9 +10,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.kk.expensecalculator.domain.ExpenseRecordDO;
+import com.kk.expensecalculator.dto.ExpenseRecordDTO;
 import com.kk.expensecalculator.dto.ExpenseSummaryDTO;
 import com.kk.expensecalculator.dto.ItemSummaryDTO;
 import com.kk.expensecalculator.dto.WaterDairyExpenseDTO;
+import com.kk.expensecalculator.repository.ExpenseRecordRepo;
 import com.kk.expensecalculator.repository.WaterAndDairyExpenseRepo;
 import com.kk.expensecalculator.util.ExpenseCalDateUtils;
 import com.kk.expensecalculator.util.ExpenseCalculatorUtils;
@@ -21,17 +24,19 @@ import com.kk.expensecalculator.util.ExpenseCalculatorUtils;
 public class ExpenseSummaryImpl implements ExpenseSummary {
 
 	@Autowired
-	private WaterAndDairyExpenseRepo expenseSummaryRepo;
+	private WaterAndDairyExpenseRepo waterAndDairyExpenseRepo;
+	
+	@Autowired
+	private ExpenseRecordRepo expenseRecordRepo;
 
 	@Override
-	public ExpenseSummaryDTO getExpenseSummaryForTheMonth(int month, int year) {
+	public ExpenseSummaryDTO getWaterAndDairyMonthlyExpense(int month, int year) {
 		
 		LocalDate startDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(0);
 		LocalDate endDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(1);
 		ExpenseSummaryDTO expenseSummaryDTO = new ExpenseSummaryDTO();
 		
-		// To Do for the month - date range, for demo --> we're finding all.
-		List<WaterDairyExpenseDTO> expenseDataList = ExpenseCalculatorUtils.toDTOObjectFromDO(expenseSummaryRepo.findByDateRange(startDate, endDate));
+		List<WaterDairyExpenseDTO> expenseDataList = ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate));
 		
 		if(!expenseDataList.isEmpty()) {
 			// Summary
@@ -59,5 +64,61 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 		}
 		
 	}
+
+	@Override
+	public ExpenseSummaryDTO getMonthlyExpense(int month, int year) {
+		
+		LocalDate startDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(0);
+		LocalDate endDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(1);
+		
+		List<ExpenseRecordDTO> expenseRecordDTOList = expenseRecordDOToDTO(expenseRecordRepo.findByDateOfExpense(startDate, endDate));
+		
+		// For summary
+		Map<String, List<ExpenseRecordDTO>> recordsByExpenseCategory = expenseRecordDTOList.stream().collect(Collectors.groupingBy(ExpenseRecordDTO::getExpenseCategory));
+		
+		List<ItemSummaryDTO> itemExpenseSummaryDTOList = new ArrayList<>();
+		// For total expense calculation
+		List<Integer> expensesPerItem = new ArrayList<>();
+		
+		recordsByExpenseCategory.forEach((item, itemExpense) -> {
+			
+			ItemSummaryDTO itemSummaryDTO = new ItemSummaryDTO();
+			int expensePerItem = itemExpense.stream().map(r -> r.getAmount()).reduce(0, (i,j) -> i+j);
+			
+			itemSummaryDTO.setItem(item);			
+			itemSummaryDTO.setAmountPayabalePerItem(expensePerItem);
+			
+			itemExpenseSummaryDTOList.add(itemSummaryDTO);
+			expensesPerItem.add(expensePerItem);
+			
+		});
+		
+		ExpenseSummaryDTO expenseSummaryDTO = new ExpenseSummaryDTO();
+		expenseSummaryDTO.setExpenseSummaryDTOList(itemExpenseSummaryDTOList);
+		expenseSummaryDTO.setFinalAmountPayable(expensesPerItem.stream().reduce(0, (i,j) -> i + j));
+		
+		
+		return expenseSummaryDTO;
+	}
+	
+	private List<ExpenseRecordDTO> expenseRecordDOToDTO(List<ExpenseRecordDO> expenseRecords){
+		
+		List<ExpenseRecordDTO> expenseRecordDTOList = new ArrayList<>();
+		
+		expenseRecords.stream().forEach(er -> {
+			ExpenseRecordDTO expenseRecordDTO = new ExpenseRecordDTO();
+			
+			expenseRecordDTO.setItem(er.getItem());
+			expenseRecordDTO.setAmount(er.getAmount());
+			expenseRecordDTO.setExpenseCategory(er.getExpenseCategory());
+			expenseRecordDTO.setNotes(er.getNotes());
+			expenseRecordDTO.setDateOfExpense(er.getDateOfExpense().toString());
+			
+			expenseRecordDTOList.add(expenseRecordDTO);
+		});
+		
+		return expenseRecordDTOList;
+	}
+	
 
 }
