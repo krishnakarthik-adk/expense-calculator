@@ -1,5 +1,6 @@
 package com.kk.expensecalculator.util;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ExpenseCalculatorUtils {
 		return expenseDTOList;
 	}
 
-	public static List<WaterDairyExpenseDO> toDomainObjectFromDTO(List<WaterDairyExpenseDTO> waterAndDairyExpenseDTOList) {
+	public static List<WaterDairyExpenseDO> toDomainObjectFromDTO(List<WaterDairyExpenseDTO> waterAndDairyExpenseDTOList, LocalDate dateOfExpense) {
 		
 		List<WaterDairyExpenseDO> expenseList = new ArrayList<>();
 		
@@ -38,7 +39,8 @@ public class ExpenseCalculatorUtils {
 			waterDairyExpenseDO.setQuantity(data.getQuantity());
 			waterDairyExpenseDO.setUnitPrice(data.getUnitPrice());
 			waterDairyExpenseDO.setTotalPrice(data.getUnitPrice() * data.getQuantity());
-			waterDairyExpenseDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(data.getDateOfExpense(), ExpenseCalDateUtils.INPUT_DATE_PATTERN));
+			// waterDairyExpenseDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(data.getDateOfExpense(), ExpenseCalDateUtils.INPUT_DATE_PATTERN));
+			waterDairyExpenseDO.setDateOfExpense(dateOfExpense);
 			
 			expenseList.add(waterDairyExpenseDO);
 		});

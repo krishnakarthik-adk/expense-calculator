@@ -6,7 +6,7 @@ import java.util.List;
 import com.kk.expensecalculator.dto.WaterDairyExpenseDTO;
 
 public interface WaterAndDairyExpenseService {
-	public void saveWaterAndDairyExpense(List<WaterDairyExpenseDTO> waterAndDairyExpenseList);
+	public void saveWaterAndDairyExpense(List<WaterDairyExpenseDTO> waterAndDairyExpenseList, LocalDate dateOfExpense);
 
 	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseDataForDateRange(LocalDate startDate, LocalDate endDate);
 

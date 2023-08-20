@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,9 +27,19 @@ public class WaterAndDairyExpenseCalController {
 	WaterAndDairyExpenseService waterAndDairyExpenseService;
 	
 	@RequestMapping(value = "/saveWaterAndDairyExpense", method = {RequestMethod.POST})
-	public void saveWaterAndDairyExpense(@RequestBody List<WaterDairyExpenseDTO> expenseDataList) {
+	public ResponseEntity<HttpStatus> saveWaterAndDairyExpense(@RequestBody List<WaterDairyExpenseDTO> expenseDataList, @RequestParam String dateOfExpense) {
 		List<WaterDairyExpenseDTO> expenseList = expenseDataList;
-		waterAndDairyExpenseService.saveWaterAndDairyExpense(expenseList);
+
+		// We initialize the dateOfExpense to LocalDate.now() if we don't receive the date parameter
+		LocalDate expenseDate = LocalDate.now();
+		
+		if(StringUtils.isNotBlank(dateOfExpense)) {
+			expenseDate = ExpenseCalDateUtils.convertStringDateToLocalDate(dateOfExpense, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+		}
+		
+		waterAndDairyExpenseService.saveWaterAndDairyExpense(expenseList, expenseDate);
+		
+		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/getWaterAndExpenseDataFor", method = RequestMethod.GET, produces = "application/json")

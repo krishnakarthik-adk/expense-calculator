@@ -18,9 +18,9 @@ public class WaterAndDairyExpenseServiceImpl implements WaterAndDairyExpenseServ
 	WaterAndDairyExpenseRepo waterAndDairyExpenseRepo;
 
 	@Override
-	public void saveWaterAndDairyExpense(List<WaterDairyExpenseDTO> waterAndDairyExpenseList) {
+	public void saveWaterAndDairyExpense(List<WaterDairyExpenseDTO> waterAndDairyExpenseList, LocalDate dateOfExpense) {
 		
-		List<WaterDairyExpenseDO> expenseList = ExpenseCalculatorUtils.toDomainObjectFromDTO(waterAndDairyExpenseList);
+		List<WaterDairyExpenseDO> expenseList = ExpenseCalculatorUtils.toDomainObjectFromDTO(waterAndDairyExpenseList, dateOfExpense);
 
 		waterAndDairyExpenseRepo.saveAll(expenseList);
 	}
