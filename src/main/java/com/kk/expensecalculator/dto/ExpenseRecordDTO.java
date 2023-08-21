@@ -3,6 +3,7 @@ package com.kk.expensecalculator.dto;
 public class ExpenseRecordDTO {
 	private String item;
 	private int amount;
+	private String transactionType;
 	private String expenseCategory;
 	private String notes;
 	private String dateOfExpense;
@@ -21,6 +22,14 @@ public class ExpenseRecordDTO {
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	public String getExpenseCategory() {

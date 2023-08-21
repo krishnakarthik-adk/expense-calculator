@@ -23,9 +23,10 @@ public class ExpenseRecordDO {
 	private String item;
 	@Column(name = "AMOUNT")
 	private int amount;
+	@Column(name = "TRANSACTION_TYPE")
+	private String transactionType;
 	@Column(name = "EXPENSE_CATEGORY")
 	private String expenseCategory;
-
 	@Column(name = "NOTES")
 	private String notes;
 	@Column(name = "DATE_OF_EXPENSE")
@@ -53,6 +54,14 @@ public class ExpenseRecordDO {
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	public String getExpenseCategory() {

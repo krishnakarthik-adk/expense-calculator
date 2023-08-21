@@ -40,6 +40,7 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 			
 			expenseRecordDO.setItem(expenseRecord.getItem());
 			expenseRecordDO.setAmount(expenseRecord.getAmount());
+			expenseRecordDO.setTransactionType(expenseRecord.getTransactionType());
 			expenseRecordDO.setExpenseCategory(expenseRecord.getExpenseCategory());
 			expenseRecordDO.setNotes(expenseRecord.getNotes());
 			// We set the date from the parameter received
