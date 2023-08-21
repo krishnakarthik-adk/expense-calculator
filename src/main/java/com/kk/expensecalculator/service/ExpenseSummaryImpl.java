@@ -107,8 +107,6 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 		
 		expenseRecords.stream().forEach(er -> {
 			ExpenseRecordDTO expenseRecordDTO = new ExpenseRecordDTO();
-			
-			expenseRecordDTO.setItem(er.getItem());
 			expenseRecordDTO.setAmount(er.getAmount());
 			expenseRecordDTO.setExpenseCategory(er.getExpenseCategory());
 			expenseRecordDTO.setNotes(er.getNotes());

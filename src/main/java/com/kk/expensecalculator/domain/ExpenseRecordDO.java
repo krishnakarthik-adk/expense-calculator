@@ -18,9 +18,6 @@ public class ExpenseRecordDO {
 	@SequenceGenerator(name = "EXPENSE_RECORD", sequenceName = "EXPENSE_RECORD_SEQ", allocationSize = 1)
 	@Column(name = "ID")
 	private Long id;
-
-	@Column(name = "ITEM")
-	private String item;
 	@Column(name = "AMOUNT")
 	private int amount;
 	@Column(name = "TRANSACTION_TYPE")
@@ -38,14 +35,6 @@ public class ExpenseRecordDO {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
 	}
 
 	public int getAmount() {

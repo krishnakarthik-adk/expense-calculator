@@ -37,8 +37,6 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 		
 		expenseRecordDTOList.stream().forEach(expenseRecord -> {
 			ExpenseRecordDO expenseRecordDO = new ExpenseRecordDO();
-			
-			expenseRecordDO.setItem(expenseRecord.getItem());
 			expenseRecordDO.setAmount(expenseRecord.getAmount());
 			expenseRecordDO.setTransactionType(expenseRecord.getTransactionType());
 			expenseRecordDO.setExpenseCategory(expenseRecord.getExpenseCategory());
