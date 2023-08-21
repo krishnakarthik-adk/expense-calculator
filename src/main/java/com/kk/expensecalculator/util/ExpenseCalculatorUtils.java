@@ -16,7 +16,7 @@ public class ExpenseCalculatorUtils {
 		expenseDataDOList.stream().forEach(data -> {
 			WaterDairyExpenseDTO waterDairyExpenseDTO = new WaterDairyExpenseDTO();
 			waterDairyExpenseDTO.setComments(data.getComments());
-			waterDairyExpenseDTO.setItem(data.getItem());
+			waterDairyExpenseDTO.setItem(data.getItem().toLowerCase());
 			waterDairyExpenseDTO.setQuantity(data.getQuantity());
 			waterDairyExpenseDTO.setUnitPrice(data.getUnitPrice());
 			waterDairyExpenseDTO.setTotalPrice(data.getTotalPrice());

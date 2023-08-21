@@ -10,7 +10,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "WATER_DAIRY_EXPENSE_COPY")
+@Table(name = "WATER_DAIRY_EXPENSE")
 public class WaterDairyExpenseDO {
 
 	@Id
