@@ -1,5 +1,6 @@
 package com.kk.expensecalculator.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,35 +20,16 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 
 	@Autowired
 	private ExpenseRecordRepo expenseRecordRepo;
-	
+
 	@Autowired
 	private ExpenseRecordSelectRepo expenseRecordSelectRepo;
-	
+
 	@Override
 	public void saveExpenseRecords(List<ExpenseRecordDTO> expenseRecords, String dateOfExpense) {
-		
+
 		List<ExpenseRecordDO> expenseRecordDOList = convertDTOToDomainObject(expenseRecords, dateOfExpense);
 		expenseRecordRepo.saveAll(expenseRecordDOList);
 
-	}
-	
-	private List<ExpenseRecordDO> convertDTOToDomainObject(List<ExpenseRecordDTO> expenseRecordDTOList, String dateOfExpense) {
-		
-		List<ExpenseRecordDO> expenseRecords = new ArrayList<>();
-		
-		expenseRecordDTOList.stream().forEach(expenseRecord -> {
-			ExpenseRecordDO expenseRecordDO = new ExpenseRecordDO();
-			expenseRecordDO.setAmount(expenseRecord.getAmount());
-			expenseRecordDO.setTransactionType(expenseRecord.getTransactionType());
-			expenseRecordDO.setExpenseCategory(expenseRecord.getExpenseCategory());
-			expenseRecordDO.setNotes(expenseRecord.getNotes());
-			// We set the date from the parameter received
-			expenseRecordDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(dateOfExpense, ExpenseCalDateUtils.INPUT_DATE_PATTERN));
-			
-			expenseRecords.add(expenseRecordDO);
-		});
-		
-		return expenseRecords;
 	}
 
 	@Override
@@ -55,8 +37,54 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 		String selectOptions = expenseRecordSelectRepo.findBySelectName();
 		List<String> sortedSelectOpntions = Arrays.asList(selectOptions.split(","));
 		Collections.sort(sortedSelectOpntions);
-		
+
 		return sortedSelectOpntions;
+	}
+
+	@Override
+	public List<ExpenseRecordDTO> getMonthlyExpenseRecordsForDateRange(LocalDate startDate, LocalDate endDate) {
+		return convertDomainObjectToDTO(expenseRecordRepo.findByDateOfExpense(startDate, endDate));
+	}
+
+	private List<ExpenseRecordDO> convertDTOToDomainObject(List<ExpenseRecordDTO> expenseRecordDTOList,
+			String dateOfExpense) {
+
+		List<ExpenseRecordDO> expenseRecords = new ArrayList<>();
+
+		expenseRecordDTOList.stream().forEach(expenseRecord -> {
+			ExpenseRecordDO expenseRecordDO = new ExpenseRecordDO();
+			expenseRecordDO.setAmount(expenseRecord.getAmount());
+			expenseRecordDO.setTransactionType(expenseRecord.getTransactionType());
+			expenseRecordDO.setExpenseCategory(expenseRecord.getExpenseCategory());
+			expenseRecordDO.setNotes(expenseRecord.getNotes());
+			// We set the date from the parameter received
+			expenseRecordDO.setDateOfExpense(ExpenseCalDateUtils.convertStringDateToLocalDate(dateOfExpense,
+					ExpenseCalDateUtils.INPUT_DATE_PATTERN));
+
+			expenseRecords.add(expenseRecordDO);
+		});
+
+		return expenseRecords;
+	}
+	
+	private List<ExpenseRecordDTO> convertDomainObjectToDTO(List<ExpenseRecordDO> expenseRecords) {
+		
+		List<ExpenseRecordDTO> expesneRecordDTOList = new ArrayList<>();
+		
+		expenseRecords.stream().forEach(expenseRecord -> {
+			ExpenseRecordDTO expenseRecordDTO = new ExpenseRecordDTO();
+			
+			expenseRecordDTO.setAmount(expenseRecord.getAmount());
+			expenseRecordDTO.setTransactionType(expenseRecord.getTransactionType());
+			expenseRecordDTO.setExpenseCategory(expenseRecord.getExpenseCategory());
+			expenseRecordDTO.setNotes(expenseRecord.getNotes());
+			expenseRecordDTO.setDateOfExpense(expenseRecord.getDateOfExpense().toString());
+			
+			expesneRecordDTOList.add(expenseRecordDTO);
+			
+		});
+		
+		return expesneRecordDTOList;
 	}
 
 }
