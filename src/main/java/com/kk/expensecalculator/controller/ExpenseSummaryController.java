@@ -3,6 +3,8 @@ package com.kk.expensecalculator.controller;
 import java.time.LocalDate;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,12 +18,16 @@ import com.kk.expensecalculator.service.ExpenseSummary;
 @RequestMapping("/api/expensecalculator/v1")
 public class ExpenseSummaryController {
 
+	private static final Logger log = LogManager.getLogger(ExpenseRecordController.class);
+	
 	@Autowired
 	private ExpenseSummary expenseSummary;
 	
 	// The below is for Water and Dairy expense
 	@RequestMapping(value = "/expenseSummary", method = RequestMethod.GET)
 	public ExpenseSummaryDTO getWaterAndDairyMonthlyExpense(@RequestParam String month, @RequestParam String year){
+		
+		log.info("The water and dairy summary requested for the month: {} and year: {}", month, year);
 		
 		// We initialize to the current month and year, in case we don't receive the parameters
 		int monthSelected = LocalDate.now().getMonthValue();
@@ -42,6 +48,8 @@ public class ExpenseSummaryController {
 	 */
 	@RequestMapping(value = "/monthlyExpenseSummary", method = RequestMethod.GET)
 	public ExpenseSummaryDTO getMonthlyExpense(@RequestParam String month, @RequestParam String year) {
+		
+		log.info("The monthly expense summary requested for the month: {} and year: {}", month, year);
 		
 		// We initialize to the current month and year, in case we don't receive the parameters
 		int monthSelected = LocalDate.now().getMonthValue();

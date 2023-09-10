@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import com.kk.expensecalculator.util.ExpenseCalDateUtils;
 @RequestMapping(value = "/api/v1")
 public class WaterAndDairyExpenseCalController {
 	
+	private static final Logger log = LogManager.getLogger(WaterAndDairyExpenseCalController.class);
+	
 	@Autowired
 	WaterAndDairyExpenseService waterAndDairyExpenseService;
 	
@@ -39,11 +43,15 @@ public class WaterAndDairyExpenseCalController {
 		
 		waterAndDairyExpenseService.saveWaterAndDairyExpense(expenseList, expenseDate);
 		
+		log.info("Water and Dairy expense saved successfully for the date: {}", expenseDate);
+		
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/getWaterAndExpenseDataFor", method = RequestMethod.GET, produces = "application/json")
 	public List<WaterDairyExpenseDTO> getWaterAndDairyExpense(@RequestParam String strStartDate, @RequestParam String strEndDate){
+		
+		log.info("Water and Dairy expense data requested for the date range - {}, {}", strStartDate, strEndDate);
 		
 		// We initialize the startDate & endDate to LocalDate.now() if we don't receive the date range
 		LocalDate startDate = LocalDate.now();

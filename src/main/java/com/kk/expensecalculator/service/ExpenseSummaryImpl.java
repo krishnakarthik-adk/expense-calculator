@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,8 @@ import com.kk.expensecalculator.util.ExpenseCalculatorUtils;
 @Component
 public class ExpenseSummaryImpl implements ExpenseSummary {
 
+	private static final Logger log = LogManager.getLogger(ExpenseSummaryImpl.class);
+	
 	@Autowired
 	private WaterAndDairyExpenseRepo waterAndDairyExpenseRepo;
 	
@@ -34,6 +38,9 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 		
 		LocalDate startDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(0);
 		LocalDate endDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(1);
+		
+		log.info("Fetching water and dairy expense for the date range(after conversion to LocalDates): {}, {} ", startDate, endDate);
+		
 		ExpenseSummaryDTO expenseSummaryDTO = new ExpenseSummaryDTO();
 		
 		List<WaterDairyExpenseDTO> expenseDataList = ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate));
@@ -70,6 +77,8 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 		
 		LocalDate startDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(0);
 		LocalDate endDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(1);
+		
+		log.info("Fetching monthly expense for the date range: {}, {} ", startDate, endDate);
 		
 		List<ExpenseRecordDTO> expenseRecordDTOList = expenseRecordDOToDTO(expenseRecordRepo.findByDateOfExpense(startDate, endDate));
 		
