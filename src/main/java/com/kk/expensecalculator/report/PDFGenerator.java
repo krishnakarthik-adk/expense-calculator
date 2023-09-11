@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 @PropertySource(value = "classpath:config/pdf.properties")
 public class PDFGenerator implements ReportGenerator {
+	
+	private static final Logger log = LogManager.getLogger(PDFGenerator.class);
 	
 	@Value("${pdf.filename}")
 	private String fileName;
@@ -90,9 +94,14 @@ public class PDFGenerator implements ReportGenerator {
 		document.add(new Paragraph(summary, fontTitle));
 		LocalDate startDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strStartDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
 		LocalDate endDate = ExpenseCalDateUtils.convertStringDateToLocalDate(strEndDate, ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+		
+		log.info("Date range after conversion to LocalDates for the pdf report, startDate: {}, endDate: {}", startDate, endDate);
+		
 		document.add(new Paragraph(expensePeriod + " " + ExpenseCalDateUtils.formatDateForOutput(startDate) + " to " + ExpenseCalDateUtils.formatDateForOutput(endDate)));
 		document.add(new Paragraph(totalAmount + " " + finalPayable));
 		document.add(new Paragraph("\n"));
+		
+		log.info("Initializing the config for the PDFTable.");
 		
 		PdfPTable summaryTable = summaryTableConfig();
 		// Summary headers

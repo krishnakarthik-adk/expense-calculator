@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/api/v1")
 public class ExpenseCalculatorReportController {
 
+	private static final Logger log = LogManager.getLogger(ExpenseCalculatorReportController.class);
+	
 	@Autowired
 	WaterAndDairyExpenseService waterAndDairyExpenseService;
 
@@ -44,6 +48,8 @@ public class ExpenseCalculatorReportController {
 	@GetMapping(value = "/generatePDFReport")
 	public void generatePDFReport(HttpServletResponse response, @RequestParam String strStartDate, @RequestParam String strEndDate) throws DocumentException, IOException {
 
+		log.info("Generating PDF report for the data range strStartDate: {}, strEndDate: {}", strStartDate, strStartDate);
+		
 		response.setContentType("application/pdf");
 		response.setHeader(HTTP_HEADERS.HEADER_KEY.toString(), HTTP_HEADERS.HEADER_VALUE.toString());
 		
@@ -61,6 +67,8 @@ public class ExpenseCalculatorReportController {
 		List<WaterDairyExpenseDTO> waterDairyExpenseDTOList = waterAndDairyExpenseService.getWaterAndDairyExpenseDataForDateRange(startDate, endDate);
 
 		pdfGenerator.generateExpensePDFReport(waterDairyExpenseDTOList, strStartDate, strEndDate, response);
+		
+		log.info("Successfully generated the PDF report for the data range strStartDate: {}, strEndDate: {}", strStartDate, strStartDate);
 
 	}
 }
