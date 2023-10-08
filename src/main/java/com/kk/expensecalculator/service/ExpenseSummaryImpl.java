@@ -55,6 +55,8 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 				ItemSummaryDTO summaryDto = new ItemSummaryDTO();
 				summaryDto.setItem(item);			
 				summaryDto.setAmountPayabalePerItem( expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getTotalPrice).reduce((i,j) -> i+j).get() );
+				summaryDto.setQuantity( expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getQuantity).reduce((i,j) -> i+j).get() );
+				summaryDto.setUnitPrice(expenseDataPerItem.stream().mapToInt(WaterDairyExpenseDTO::getUnitPrice).findFirst().getAsInt());
 				
 				summaryDTOList.add(summaryDto);
 			});

@@ -1,6 +1,7 @@
 package com.kk.expensecalculator.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +35,7 @@ public class WaterAndDairyExpenseServiceImpl implements WaterAndDairyExpenseServ
 		
 		log.info("Fetching water and dairy expense for the date range (after conversion to LocalDates): {}, {}", startDate, endDate);
  
-		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate));
+		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate).stream().sorted(Comparator.comparing(WaterDairyExpenseDO::getDateOfExpense)).toList());
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 
 	@Override
 	public List<ExpenseRecordDTO> getMonthlyExpenseRecordsForDateRange(LocalDate startDate, LocalDate endDate) {
-		return convertDomainObjectToDTO(expenseRecordRepo.findByDateOfExpense(startDate, endDate));
+		return convertDomainObjectToDTO(expenseRecordRepo.findByDateOfExpense(startDate, endDate).stream().sorted(Comparator.comparing(ExpenseRecordDO::getDateOfExpense)).toList());
 	}
 
 	private List<ExpenseRecordDO> convertDTOToDomainObject(List<ExpenseRecordDTO> expenseRecordDTOList,
