@@ -15,4 +15,6 @@ public interface WaterAndDairyExpenseRepo extends JpaRepository<WaterDairyExpens
 	@Query(value = "SELECT * FROM WATER_DAIRY_EXPENSE w WHERE w.DATE_OF_EXPENSE BETWEEN :startDate AND :endDate", nativeQuery = true)
 	List<WaterDairyExpenseDO> findByDateRange(LocalDate startDate, LocalDate endDate);
 
+	@Query(value = "SELECT * FROM WATER_DAIRY_EXPENSE w WHERE w.ITEM_NAME = :item AND w.DATE_OF_EXPENSE BETWEEN :startDate AND :endDate", nativeQuery = true)
+	List<WaterDairyExpenseDO> findByDateRangeForItem(LocalDate startDate, LocalDate endDate, String item);
 }

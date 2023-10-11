@@ -37,6 +37,14 @@ public class WaterAndDairyExpenseServiceImpl implements WaterAndDairyExpenseServ
  
 		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRange(startDate, endDate).stream().sorted(Comparator.comparing(WaterDairyExpenseDO::getDateOfExpense)).toList());
 	}
+	
+	@Override
+	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseDataForDateRangeForItem(LocalDate startDate, LocalDate endDate, String item) {
+		
+		log.info("Fetching water and dairy expense for the date range (after conversion to LocalDates): {}, {}", startDate, endDate);
+ 
+		return ExpenseCalculatorUtils.toDTOObjectFromDO(waterAndDairyExpenseRepo.findByDateRangeForItem(startDate, endDate, item).stream().sorted(Comparator.comparing(WaterDairyExpenseDO::getDateOfExpense)).toList());
+	}
 
 	@Override
 	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseData() {

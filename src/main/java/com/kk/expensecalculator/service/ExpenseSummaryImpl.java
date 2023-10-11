@@ -36,8 +36,10 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 	@Override
 	public ExpenseSummaryDTO getWaterAndDairyMonthlyExpense(int month, int year) {
 		
-		LocalDate startDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(0);
-		LocalDate endDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(1);
+		List<LocalDate> dateRange = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year);
+		
+		LocalDate startDate = dateRange.get(0);
+		LocalDate endDate = dateRange.get(1);
 		
 		log.info("Fetching water and dairy expense for the date range(after conversion to LocalDates): {}, {} ", startDate, endDate);
 		
@@ -54,8 +56,8 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 			expenseSummaryPerItem.forEach((item, expenseDataPerItem) -> {
 				ItemSummaryDTO summaryDto = new ItemSummaryDTO();
 				summaryDto.setItem(item);			
-				summaryDto.setAmountPayabalePerItem( expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getTotalPrice).reduce((i,j) -> i+j).get() );
-				summaryDto.setQuantity( expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getQuantity).reduce((i,j) -> i+j).get() );
+				summaryDto.setAmountPayabalePerItem( expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getTotalPrice).reduce(0,(i,j) -> i+j) );
+				summaryDto.setQuantity(expenseDataPerItem.stream().map(WaterDairyExpenseDTO::getQuantity).reduce(0, (i,j) -> i+j));
 				summaryDto.setUnitPrice(expenseDataPerItem.stream().mapToInt(WaterDairyExpenseDTO::getUnitPrice).findFirst().getAsInt());
 				
 				summaryDTOList.add(summaryDto);
@@ -77,8 +79,10 @@ public class ExpenseSummaryImpl implements ExpenseSummary {
 	@Override
 	public ExpenseSummaryDTO getMonthlyExpense(int month, int year) {
 		
-		LocalDate startDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(0);
-		LocalDate endDate = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year).get(1);
+		List<LocalDate> dateRange = ExpenseCalDateUtils.getDateRangeForTheMonth(month, year);
+		
+		LocalDate startDate = dateRange.get(0);
+		LocalDate endDate = dateRange.get(1);
 		
 		log.info("Fetching monthly expense for the date range: {}, {} ", startDate, endDate);
 		

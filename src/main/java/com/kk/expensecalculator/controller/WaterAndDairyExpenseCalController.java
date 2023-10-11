@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -65,6 +66,26 @@ public class WaterAndDairyExpenseCalController {
 		}
 		
 		return waterAndDairyExpenseService.getWaterAndDairyExpenseDataForDateRange(startDate, endDate);
+	}
+	
+	// For Water and Dairy Expense Popup
+	@RequestMapping(value = "/getWaterAndExpenseDataForItem/{item}", method = RequestMethod.GET, produces = "application/json")
+	public List<WaterDairyExpenseDTO> getWaterAndDairyExpenseDataForItem(@RequestParam String strStartDate, @RequestParam String strEndDate, @PathVariable String item){
+		
+		log.info("Water and Dairy expense data requested for the date range - {}, {} and for item - {}", strStartDate, strEndDate, item);
+		
+		// We initialize the startDate & endDate to LocalDate.now() if we don't receive the date range
+		LocalDate startDate = LocalDate.now();
+		LocalDate endDate = LocalDate.now();
+		List<LocalDate> dateRange = new ArrayList<>();
+		
+		if(StringUtils.isNotBlank(strStartDate) && StringUtils.isNotBlank(strEndDate)) {
+			dateRange = ExpenseCalDateUtils.convertStringDateRangeToLocalDateRange(Arrays.asList(strStartDate, strEndDate), ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+			startDate = dateRange.get(0);
+			endDate = dateRange.get(1);
+		}
+		
+		return waterAndDairyExpenseService.getWaterAndDairyExpenseDataForDateRangeForItem(startDate, endDate, item);
 	}
 	
 	// Demo for UI project
