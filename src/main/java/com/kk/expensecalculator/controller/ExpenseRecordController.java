@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,5 +68,28 @@ public class ExpenseRecordController {
 		}
 		
 		return expenseRecordService.getMonthlyExpenseRecordsForDateRange(startDate, endDate);		
+	}
+	
+	// For monthly expense summary pop-up
+	@RequestMapping(value = "/getMonthlyExpenseRecordsByCategory/{category}", method = RequestMethod.GET)
+	public List<ExpenseRecordDTO> getMonthlyExpenseRecordsForCategory(@RequestParam String strStartDate, @RequestParam String strEndDate,@PathVariable String category) {
+		
+		log.info("Request to fetch the monthly expense records for date range - strStartDate, strEndDate: {} {} and for category - {}", strStartDate, strEndDate, category);
+		
+		LocalDate startDate;
+		LocalDate endDate;
+		List<LocalDate> dateRange = new ArrayList<>();
+		
+		if(StringUtils.isNotBlank(strStartDate) && StringUtils.isNotBlank(strEndDate)) {
+			dateRange = ExpenseCalDateUtils.convertStringDateRangeToLocalDateRange(Arrays.asList(strStartDate, strEndDate), ExpenseCalDateUtils.INPUT_DATE_PATTERN);
+			startDate = dateRange.get(0);
+			endDate = dateRange.get(1);
+		} else {
+			// We initialize the startDate & endDate to LocalDate.now() if we don't receive the date range
+			startDate = LocalDate.now();
+			endDate = LocalDate.now();
+		}
+		
+		return expenseRecordService.getMonthlyExpenseRecordsForCategory(startDate, endDate, category);		
 	}
 }

@@ -14,5 +14,8 @@ public interface ExpenseRecordRepo extends JpaRepository<ExpenseRecordDO, Long>{
 	
 	@Query(value = "SELECT * FROM EXPENSE_RECORD e WHERE e.DATE_OF_EXPENSE BETWEEN :startDate AND :endDate", nativeQuery = true)
 	List<ExpenseRecordDO> findByDateOfExpense(LocalDate startDate, LocalDate endDate);
+	
+	@Query(value = "SELECT * FROM EXPENSE_RECORD e WHERE e.EXPENSE_CATEGORY =:category AND e.DATE_OF_EXPENSE BETWEEN :startDate AND :endDate", nativeQuery = true)
+	List<ExpenseRecordDO> findByCategoryForDateRange(LocalDate startDate, LocalDate endDate, String category);
 
 }

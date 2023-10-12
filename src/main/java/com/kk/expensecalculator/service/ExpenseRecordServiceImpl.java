@@ -88,4 +88,9 @@ public class ExpenseRecordServiceImpl implements ExpenseRecordService {
 		return expesneRecordDTOList;
 	}
 
+	@Override
+	public List<ExpenseRecordDTO> getMonthlyExpenseRecordsForCategory(LocalDate startDate, LocalDate endDate, String category) {
+		return convertDomainObjectToDTO(expenseRecordRepo.findByCategoryForDateRange(startDate, endDate, category).stream().sorted(Comparator.comparing(ExpenseRecordDO::getDateOfExpense)).toList());
+	}
+
 }

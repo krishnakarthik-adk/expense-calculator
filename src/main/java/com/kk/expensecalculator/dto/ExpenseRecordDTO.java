@@ -1,20 +1,12 @@
 package com.kk.expensecalculator.dto;
 
 public class ExpenseRecordDTO {
-	private String item;
+	
 	private int amount;
 	private String transactionType;
 	private String expenseCategory;
 	private String notes;
 	private String dateOfExpense;
-
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
-	}
 
 	public int getAmount() {
 		return amount;

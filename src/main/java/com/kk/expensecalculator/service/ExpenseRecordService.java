@@ -11,4 +11,6 @@ public interface ExpenseRecordService {
 	public List<String> getExpenseRecordSelectOptions();
 
 	public List<ExpenseRecordDTO> getMonthlyExpenseRecordsForDateRange(LocalDate startDate, LocalDate endDate);
+
+	public List<ExpenseRecordDTO> getMonthlyExpenseRecordsForCategory(LocalDate startDate, LocalDate endDate, String category);
 }
